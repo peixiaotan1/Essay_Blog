@@ -1,15 +1,29 @@
-Overview:
-	main page: view posts
-		   create posts
-		   edit posts
-		   delete posts	in edit page
+<h1>Overview:</h1><hr>
+<p>This blog web application uses Node.js, Express.js, and EJS.</p>
+<P>The application allows users to create, view, store, delete, and edit blog posts. Use JSON to store the data. Styling will be an important aspect of this project to ensure a good user experience.</p>
+	
 		
-	file structure: node_modules
-			public\styles -> main.css
-			views -> index.ejs, partials -> head-foot
-			index.js as server
+<h2>file structure:</h2>
+<ul>
+	<li>node_modules</li>
+	<li>public\styles -> main.css, images</li>		
+	<li>views -> index.ejs, partials -> head,foot</li>	
+	<li>index.js as server</li>	
+</ul>
 
-	navbar
-		home: for redirect
-		Categories: new page show all the bolg title
-		About: My personal info
+<h2>navbar</h2>	
+<ul>
+ <li> home: for redirect</li>
+ <li>Categories: new page show all the bolg title</li>
+ <li>About: My personal info</li>
+</ul>
+	
+
+<h2>main page:</h2>
+<ul>
+   <li>view posts</li>
+   <li>create posts</li>
+   <li>edit posts by clicking tilte</li>
+   <li>delete posts in edit page</li>	   
+</ul>
+  
