@@ -1,0 +1,26 @@
+<%- include("partials/header.ejs") %>
+
+<section>
+    <form action="/create" method="post" >
+        <div class="form-group">
+            <label for="postTitle">Title:</label>
+            <input type="text" class="form-control" id="postTitle" name="postTitle" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postContent">Content:</label>
+            <textarea class="form-control" id="postContent" name="postContent" rows="8" required></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</section>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<%- include("partials/footer.ejs") %>

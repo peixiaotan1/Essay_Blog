@@ -1,0 +1,25 @@
+<%- include("partials/header.ejs") %>
+
+
+
+    <section>
+        <% for (const post of posts) { %>
+            <article>
+                <div class="article-header">
+                    <a href=<%= "/view/" + post.id %>  class="title-link"><h2><%= post.title %></h2></a>
+                    <a href=<%= "/edit/" + post.id %> class="edit-button btn btn-outline-secondary">Edit</a>
+                </div>
+                <p><span style="font-size: small;"><%= post.currentDate %><span></p>
+                <p><%= post.contentHead %></p>
+            </article>
+        <% } %>
+    </section>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
+<%- include("partials/footer.ejs") %>
