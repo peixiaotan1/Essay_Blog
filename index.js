@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import fs from "fs";
 import { endianness } from "os";
+import axios from "axios";
 
 const app = express();
 const port = 3000;
@@ -67,14 +68,41 @@ app.get("/view/:postId", (req, res)=>{
     const postId = parseInt(req.params.postId, 10);
     const postToView = getPostById(postId);
     const view_head = "Post "+postToView.id;
-
+    //console.log(postToView);
     res.render("view.ejs",{
         head:view_head,
+        title: JSON.stringify(postToView.title),
+        content: JSON.stringify(postToView.content),
     });
+})
+
+app.get("/ideas", (req,res)=>{
+    const idea_head = "Funny Ideas";
+
+    res.render("ideas.ejs",{
+        head:idea_head,
+    })
+})
+
+app.post("/ideas", async(req,res)=>{
+    try{
+        const idea_head = "Funny Ideas";
+        const API_URL = "https://v2.jokeapi.dev/joke/Any";
+        const result = await axios.get(API_URL);
+        //console.log(result.data);
+        res.render("ideas.ejs", {
+            content_setup: JSON.stringify(result.data.setup),
+            content_deli : JSON.stringify(result.data.delivery),
+            head:idea_head,
+        })
+    } catch (error) {
+        console.log("error");
+    }
 })
 
 
 
+//models----------------------------------------------------------------------------------------------
 function loadData() {
     try {
         const data = fs.readFileSync('data.json', 'utf8');
