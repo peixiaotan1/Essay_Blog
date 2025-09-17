@@ -368,3 +368,69 @@ footer {
     text-decoration: none;
     color: #11596d;
 }
+
+/* 删除图片按钮样式 */
+.delete-image-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+    z-index: 10;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.delete-image-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.delete-image-btn:active {
+    transform: scale(0.95);
+}
+
+/* 确保图片容器有相对定位，以便删除按钮正确定位 */
+.current-image-item {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+/* 调整删除按钮在home-gallery-image上的位置 */
+.current-image-item .home-gallery-image {
+    position: relative;
+    display: block;
+}
+
+/* 确保图片编号也正确定位 */
+.current-image-item .image-number {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: bold;
+    z-index: 5;
+    min-width: 12px;
+    text-align: center;
+}

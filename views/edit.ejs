@@ -17,11 +17,14 @@
             <% if (post.imagePaths && post.imagePaths.length > 0) { %>
                 <div class="current-images mb-3">
                     <h6>Current images:</h6>
-                    <div class="current-images-grid">
+                    <div class="home-images-gallery">
                         <% post.imagePaths.forEach(function(imagePath, index) { %>
                             <div class="current-image-item">
-                                <img src="<%= imagePath.replace(/ /g, '%20') %>" alt="Current image <%= index + 1 %>" class="current-image-thumb">
+                                <img src="<%= imagePath.replace(/ /g, '%20') %>" alt="Current image <%= index + 1 %>" class="home-gallery-image">
                                 <div class="image-number"><%= index + 1 %></div>
+                                <button type="button" class="delete-image-btn" onclick="deleteImage(<%= post.id %>, '<%= imagePath %>', <%= index %>)" title="Delete this image">
+                                    ×
+                                </button>
                             </div>
                         <% }); %>
                     </div>
@@ -52,6 +55,51 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("postTitle").focus();
     });
+
+    function deleteImage(postId, imagePath, imageIndex) {
+        if (confirm('Are you sure you want to delete this image?')) {
+            fetch(`/delete-image/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    imagePath: imagePath,
+                    imageIndex: imageIndex
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the image element from the page
+                    const imageItem = document.querySelector(`[onclick*="${imagePath}"]`).closest('.current-image-item');
+                    imageItem.remove();
+                    
+                    // Update image numbers
+                    updateImageNumbers();
+                    
+                    // Show success message
+                    alert('Image deleted successfully!');
+                } else {
+                    alert('Error deleting image: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting image');
+            });
+        }
+    }
+
+    function updateImageNumbers() {
+        const imageItems = document.querySelectorAll('.current-image-item');
+        imageItems.forEach((item, index) => {
+            const numberDiv = item.querySelector('.image-number');
+            if (numberDiv) {
+                numberDiv.textContent = index + 1;
+            }
+        });
+    }
 </script>
 
 <%- include("partials/footer.ejs") %>

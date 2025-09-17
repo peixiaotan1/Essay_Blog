@@ -34,6 +34,7 @@ const upload = multer({
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.listen(port, ()=>{
@@ -107,6 +108,48 @@ app.post("/delete/:postId", (req,res)=>{
     const postToDelete = getPostById(postId);
     deletePost(postToDelete);
     res.redirect("/");
+})
+
+// 删除单个图片的路由
+app.post("/delete-image/:postId", (req,res)=>{
+    const postId = parseInt(req.params.postId, 10);
+    const { imagePath, imageIndex } = req.body;
+    
+    try {
+        const data = loadData();
+        const postIndex = data.findIndex(post => post.id === postId);
+        
+        if (postIndex === -1) {
+            return res.json({ success: false, error: 'Post not found' });
+        }
+        
+        const post = data[postIndex];
+        
+        // 从图片路径数组中删除指定的图片
+        if (post.imagePaths && post.imagePaths.length > imageIndex) {
+            const imageToDelete = post.imagePaths[imageIndex];
+            
+            // 从数组中删除图片路径
+            post.imagePaths.splice(imageIndex, 1);
+            
+            // 删除服务器上的图片文件
+            const filePath = 'public' + imageToDelete;
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+            
+            // 更新数据
+            data[postIndex] = post;
+            fs.writeFileSync('data.json', JSON.stringify(data));
+            
+            res.json({ success: true });
+        } else {
+            res.json({ success: false, error: 'Image not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        res.json({ success: false, error: 'Server error' });
+    }
 })
 
 app.get("/view/:postId", (req, res)=>{
