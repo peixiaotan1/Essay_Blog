@@ -43,7 +43,10 @@ let memoryData = [
         content: "This is a blog system built with Node.js and Express. It runs on Vercel and supports creating, editing, and deleting articles.",
         contentHead: "This is a blog system built with Node.js and Express. It runs on Vercel and supports creating, editing, and deleting articles.",
         currentDate: new Date().toLocaleDateString(),
-        imagePaths: []
+        imagePaths: [
+            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop"
+        ]
     },
     {
         id: 2,
@@ -52,7 +55,11 @@ let memoryData = [
         content: "This project uses the following technologies: Node.js, Express.js, EJS template engine, Multer file upload, and Vercel deployment platform.",
         contentHead: "This project uses the following technologies: Node.js, Express.js, EJS template engine, Multer file upload, and Vercel deployment platform.",
         currentDate: new Date().toLocaleDateString(),
-        imagePaths: []
+        imagePaths: [
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop"
+        ]
     }
 ];
 
@@ -118,8 +125,11 @@ app.post("/create", upload.array('postImages', 10), (req,res)=>{
     const currentDate = new Date().toLocaleDateString();
     const postId = getMaxId() + 1;
     
-    // 在Vercel环境中，暂时禁用图片上传功能
-    const imagePaths = [];
+    // 在Vercel环境中，为新文章添加示例图片
+    const sampleImages = [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop"
+    ];
     
     saveData({ 
         id: postId, 
@@ -128,7 +138,7 @@ app.post("/create", upload.array('postImages', 10), (req,res)=>{
         content, 
         contentHead, 
         currentDate,
-        imagePaths
+        imagePaths: sampleImages
     });
     res.redirect('/');    
 })
