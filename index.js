@@ -38,19 +38,19 @@ app.use(express.static('public'));
 let memoryData = [
     {
         id: 1,
-        title: "欢迎来到我的博客",
-        author: "管理员",
-        content: "这是一个使用Node.js和Express构建的博客系统。在Vercel上运行，支持创建、编辑和删除文章。",
-        contentHead: "这是一个使用Node.js和Express构建的博客系统。在Vercel上运行，支持创建、编辑和删除文章。",
+        title: "Welcome to My Blog",
+        author: "Admin",
+        content: "This is a blog system built with Node.js and Express. It runs on Vercel and supports creating, editing, and deleting articles.",
+        contentHead: "This is a blog system built with Node.js and Express. It runs on Vercel and supports creating, editing, and deleting articles.",
         currentDate: new Date().toLocaleDateString(),
         imagePaths: []
     },
     {
         id: 2,
-        title: "技术栈介绍",
-        author: "开发者",
-        content: "本项目使用了以下技术：Node.js、Express.js、EJS模板引擎、Multer文件上传、以及Vercel部署平台。",
-        contentHead: "本项目使用了以下技术：Node.js、Express.js、EJS模板引擎、Multer文件上传、以及Vercel部署平台。",
+        title: "Tech Stack Introduction",
+        author: "Developer",
+        content: "This project uses the following technologies: Node.js, Express.js, EJS template engine, Multer file upload, and Vercel deployment platform.",
+        contentHead: "This project uses the following technologies: Node.js, Express.js, EJS template engine, Multer file upload, and Vercel deployment platform.",
         currentDate: new Date().toLocaleDateString(),
         imagePaths: []
     }
