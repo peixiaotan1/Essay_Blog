@@ -7,7 +7,104 @@
     <title>A Blog</title>
     <base href="/">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/main.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #f3eaea;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px;
+        }
+        
+        header {
+            background-color: #212121;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #ffffff;
+        }
+        
+        nav {
+            background-color: #333333;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        section {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        article {
+            background-color: #1e1e1e;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        article h2 {
+            color: #61dafb;
+        }
+        
+        .edit-button {
+            background-color: #61dafb;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .edit-button:hover {
+            background-color: #4fa8c5;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        footer {
+            background-color: #212121;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .title-link {
+            text-decoration: none;
+            color: #61dafb;
+        }
+        
+        .title-link:hover {
+            text-decoration: none;
+            color: #11596d;
+        }
+        
+        .create-button {
+            margin-left: auto;
+        }
+    </style>
 </head>
 
 <body>

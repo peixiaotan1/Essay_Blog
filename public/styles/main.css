@@ -9,7 +9,7 @@ body {
 
 header {
     background-color: #212121;
-    background: url('./src/headbg1.jpg') center/cover no-repeat;
+    background: url('/styles/src/headbg1.jpg') center/cover no-repeat;
     padding: 30px;
     text-align: center;
 }
