@@ -1,21 +1,13 @@
-import bodyParser from "body-parser";
-import express from "express";
-import fs from "fs";
-import multer from "multer";
-import { endianness } from "os";
+const bodyParser = require("body-parser");
+const express = require("express");
+const fs = require("fs");
+const multer = require("multer");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// 配置文件存储
-const storage = multer.diskStorage({
-  destination: 'public/uploads/',
-  filename: (req, file, cb) => {
-    // 替换文件名中的空格为下划线，避免URL问题
-    const sanitizedName = file.originalname.replace(/\s+/g, '_');
-    cb(null, Date.now() + '-' + sanitizedName);
-  }
-});
+// 配置文件存储 - 使用内存存储，因为Vercel不支持文件系统写入
+const storage = multer.memoryStorage();
 
 const upload = multer({ 
   storage: storage,
@@ -28,19 +20,85 @@ const upload = multer({
     }
   },
   limits: {
-    fileSize: 5 * 1024 * 1024, // 限制文件大小为5MB
-    files: 10 // 限制最多10个文件
+    fileSize: 5 * 1024 * 1024, // 5MB
+    files: 10
   }
 });
 
+// 设置EJS模板引擎
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+// 中间件
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.listen(port, ()=>{
-    console.log(`Listening on port ${port}`);
-});
+// 内存数据存储 - Vercel兼容版本
+let memoryData = [
+    {
+        id: 1,
+        title: "欢迎来到我的博客",
+        author: "管理员",
+        content: "这是一个使用Node.js和Express构建的博客系统。在Vercel上运行，支持创建、编辑和删除文章。",
+        contentHead: "这是一个使用Node.js和Express构建的博客系统。在Vercel上运行，支持创建、编辑和删除文章。",
+        currentDate: new Date().toLocaleDateString(),
+        imagePaths: []
+    },
+    {
+        id: 2,
+        title: "技术栈介绍",
+        author: "开发者",
+        content: "本项目使用了以下技术：Node.js、Express.js、EJS模板引擎、Multer文件上传、以及Vercel部署平台。",
+        contentHead: "本项目使用了以下技术：Node.js、Express.js、EJS模板引擎、Multer文件上传、以及Vercel部署平台。",
+        currentDate: new Date().toLocaleDateString(),
+        imagePaths: []
+    }
+];
 
+function loadData() {
+    return memoryData;
+}
+
+function saveData(post) {
+    memoryData.push(post);
+}
+
+function updateData(updatedPost){
+    const index = memoryData.findIndex(post => post.id === updatedPost.id);
+    if (index !== -1) {
+        memoryData[index] = updatedPost;
+    }
+}
+
+function deletePost(postToDelete){
+    const index = memoryData.findIndex(post => post.id === postToDelete.id);
+    if (index !== -1) {
+        memoryData.splice(index, 1);
+    }
+}
+
+function getPostById(postId) {
+    const data = loadData();
+    return data.find(post => post.id === postId);
+}
+
+function getMaxId(){
+    const data = loadData();
+    if (data.length === 0){
+        return 0;
+    }
+    const maxId = Math.max(...data.map(post => post.id));
+    return maxId;
+}
+
+function getContentHead(content){
+    const wordsArray = content.split(' ');
+    const contentHead = wordsArray.slice(0,10).join(' ');
+    return contentHead;
+}
+
+// 路由
 app.get("/", (req,res)=>{
     const main_head = "My Terrible Blog";
     const data = loadData();
@@ -60,8 +118,8 @@ app.post("/create", upload.array('postImages', 10), (req,res)=>{
     const currentDate = new Date().toLocaleDateString();
     const postId = getMaxId() + 1;
     
-    // 处理多个图片
-    const imagePaths = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+    // 在Vercel环境中，暂时禁用图片上传功能
+    const imagePaths = [];
     
     saveData({ 
         id: postId, 
@@ -94,10 +152,8 @@ app.post("/edit/:postId", upload.array('postImages', 10), (req,res)=>{
     postToUpdate.content = req.body["postContent"];
     postToUpdate.contentHead = getContentHead(req.body["postContent"]);
     
-    // 如果上传了新图片，更新图片路径数组
-    if (req.files && req.files.length > 0) {
-        postToUpdate.imagePaths = req.files.map(file => '/uploads/' + file.filename);
-    }
+    // 在Vercel环境中，保持现有图片路径不变
+    // postToUpdate.imagePaths 保持不变
     
     updateData(postToUpdate);
     res.redirect("/");
@@ -110,7 +166,7 @@ app.post("/delete/:postId", (req,res)=>{
     res.redirect("/");
 })
 
-// 删除单个图片的路由
+// 删除单个图片的路由 - Vercel版本（仅从数据中删除，不删除文件）
 app.post("/delete-image/:postId", (req,res)=>{
     const postId = parseInt(req.params.postId, 10);
     const { imagePath, imageIndex } = req.body;
@@ -127,20 +183,11 @@ app.post("/delete-image/:postId", (req,res)=>{
         
         // 从图片路径数组中删除指定的图片
         if (post.imagePaths && post.imagePaths.length > imageIndex) {
-            const imageToDelete = post.imagePaths[imageIndex];
-            
             // 从数组中删除图片路径
             post.imagePaths.splice(imageIndex, 1);
             
-            // 删除服务器上的图片文件
-            const filePath = 'public' + imageToDelete;
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-            
             // 更新数据
-            data[postIndex] = post;
-            fs.writeFileSync('data.json', JSON.stringify(data));
+            memoryData[postIndex] = post;
             
             res.json({ success: true });
         } else {
@@ -163,52 +210,12 @@ app.get("/view/:postId", (req, res)=>{
     });
 })
 
-function loadData() {
-    try {
-        const data = fs.readFileSync('data.json', 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        return [];
-    }
+// 启动服务器
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, ()=>{
+        console.log(`Listening on port ${port}`);
+    });
 }
 
-// Function to save data to the file
-function saveData(post) {
-    const data = loadData();
-    data.push(post);
-    fs.writeFileSync('data.json', JSON.stringify(data));
-}
-
-function updateData(updatedPost){
-    const data = loadData();
-    const index = data.findIndex(post => post.id === updatedPost.id);
-    data[index] = updatedPost;
-    fs.writeFileSync('data.json', JSON.stringify(data));
-}
-
-function deletePost(postToDelete){
-    const data = loadData();
-    const index = data.findIndex(post => post.id === postToDelete.id);
-    data.splice(index,1);
-    fs.writeFileSync('data.json', JSON.stringify(data));
-}
-
-function getPostById(postId) {
-    const data = loadData();
-    return data.find(post => post.id === postId);
-}
-
-function getMaxId(){
-    const data = loadData();
-    if (data.length === 0){
-        return 0;
-    }
-    const maxId = Math.max(...data.map(post => post.id));
-    return maxId;
-}
-
-function getContentHead(content){
-    const wordsArray = content.split(' ');
-    const contentHead = wordsArray.slice(0,10).join(' ');
-    return contentHead;
-}
+// 导出app供Vercel使用
+module.exports = app;
