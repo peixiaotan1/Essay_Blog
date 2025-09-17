@@ -1,0 +1,35 @@
+<%- include("partials/header.ejs") %>
+
+<section>
+    <form action="/create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="postTitle">Title:</label>
+            <input type="text" class="form-control" id="postTitle" name="postTitle" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postAuthor">Author:</label>
+            <input type="text" class="form-control" id="postAuthor" name="postAuthor" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postImages">Images (optional):</label>
+            <input type="file" class="form-control" id="postImages" name="postImages" accept="image/*" multiple>
+            <small class="form-text text-muted">Supported formats: JPG, PNG, GIF. Max size: 5MB per file. You can select multiple images (up to 10).</small>
+        </div>
+
+        <div class="form-group">
+            <label for="postContent">Content:</label>
+            <textarea class="form-control" id="postContent" name="postContent" rows="8" required></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<%- include("partials/footer.ejs") %>

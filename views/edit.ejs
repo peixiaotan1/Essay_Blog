@@ -1,0 +1,57 @@
+<%- include("partials/header.ejs") %>
+
+<section>
+    <form action=<%= "/edit/"+postId%> method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="postTitle">Title:</label>
+            <input type="text" class="form-control" id="postTitle" name="postTitle"  value="<%= post.title %>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postAuthor">Author:</label>
+            <input type="text" class="form-control" id="postAuthor" name="postAuthor" value="<%= post.author || '' %>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postImages">Images (optional):</label>
+            <% if (post.imagePaths && post.imagePaths.length > 0) { %>
+                <div class="current-images mb-3">
+                    <h6>Current images:</h6>
+                    <div class="current-images-grid">
+                        <% post.imagePaths.forEach(function(imagePath, index) { %>
+                            <div class="current-image-item">
+                                <img src="<%= imagePath.replace(/ /g, '%20') %>" alt="Current image <%= index + 1 %>" class="current-image-thumb">
+                                <div class="image-number"><%= index + 1 %></div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+            <input type="file" class="form-control" id="postImages" name="postImages" accept="image/*" multiple>
+            <small class="form-text text-muted">Supported formats: JPG, PNG, GIF. Max size: 5MB per file. You can select multiple images (up to 10). Leave empty to keep current images.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="postContent">Content:</label>
+            <textarea class="form-control" id="postContent" name="postContent" rows="8" required><%= post.content %></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+    
+    <form action="/delete/<%= post.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this post?');">
+        <div class="text-center" style="margin-top:20px;">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+    </form>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("postTitle").focus();
+    });
+</script>
+
+<%- include("partials/footer.ejs") %>

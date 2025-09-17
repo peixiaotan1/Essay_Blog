@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Blog</title>
+    <base href="/">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1><%= head %></h1>
+        </header>
+        
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+                <%if (head == "My Terrible Blog") {%>
+                    <a href="/create" class="create-button btn btn-success">Create</a>
+                    <%} else {%>
+                    <a href="/" class=" Cancel-button btn btn-secondary">Cancel</a>
+                        <%}%>
+            </div>
+        </nav>

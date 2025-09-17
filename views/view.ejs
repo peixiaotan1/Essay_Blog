@@ -1,0 +1,83 @@
+<%- include("partials/header.ejs") %>
+
+<section>
+    <article>
+        <div class="article-header">
+            <h2><%= post.title %></h2>
+        </div>
+        <p><span style="font-size: small;"><%= post.currentDate %></span> | <span style="font-size: small; color: #61dafb;">By <%= post.author || 'Unknown' %></span></p>
+        
+        <% if (post.imagePaths && post.imagePaths.length > 0) { %>
+            <div class="view-images-gallery mb-3">
+                <% post.imagePaths.forEach(function(imagePath, index) { %>
+                    <img src="<%= imagePath.replace(/ /g, '%20') %>" 
+                         alt="<%= post.title %> - Image <%= index + 1 %>" 
+                         class="view-gallery-image"
+                         onclick="openImageModal('<%= imagePath.replace(/ /g, '%20') %>', '<%= post.title %>', <%= index + 1 %>, <%= post.imagePaths.length %>)">
+                <% }); %>
+            </div>
+        <% } %>
+        
+        <div class="post-content">
+            <%= post.content.replace(/\n/g, '<br>') %>
+        </div>
+        <div class="article-actions mt-4">
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+            <a href="/edit/<%= post.id %>" class="btn btn-primary">Edit Post</a>
+        </div>
+    </article>
+</section>
+
+<!-- 简化的图片模态框 -->
+<div id="imageModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modalImage" src="" alt="">
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+// 简化的图片模态框功能
+let currentImageIndex = 0;
+let currentImages = [];
+
+function openImageModal(imageSrc, title, index, total) {
+    currentImages = Array.from(document.querySelectorAll('.view-gallery-image')).map(img => img.src);
+    currentImageIndex = index - 1;
+    
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    
+    modal.style.display = 'block';
+    modalImg.src = imageSrc;
+}
+
+// 关闭模态框
+document.querySelector('.close').onclick = function() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+// 点击模态框外部关闭
+window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// ESC键关闭
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+});
+</script>
+
+</body>
+
+<%- include("partials/footer.ejs") %>
