@@ -1,6 +1,6 @@
 <h1>Overview:</h1><hr>
 <p>This blog web application uses Node.js, Express.js, and EJS.</p>
-<P>The application allows users to create, view, store, delete, and edit blog posts. Use JSON to store the data. Styling will be an important aspect of this project to ensure a good user experience.</p>
+<P>The application allows users to create, view, store, delete, and edit blog posts and images. Use JSON to store the data, one post able to have multiple images. Styling will be an important aspect of this project to ensure a good user experience.</p>
 	
 		
 <h2>file structure:</h2>
