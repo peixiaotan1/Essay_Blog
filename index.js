@@ -27,7 +27,7 @@ const upload = multer({
 
 // 设置EJS模板引擎
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', __dirname + '/views');
 
 // 中间件
 app.use(bodyParser.urlencoded({ extended: true }));
