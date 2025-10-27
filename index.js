@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const fs = require("fs");
 const multer = require("multer");
+const axios = require("axios");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -218,6 +219,34 @@ app.get("/view/:postId", (req, res)=>{
         head:view_head,
         post: postToView
     });
+})
+
+// Ideas page routes
+app.get("/ideas", (req,res)=>{
+    const idea_head = "Funny Ideas";
+
+    res.render("ideas.ejs",{
+        head:idea_head,
+    })
+})
+
+app.post("/ideas", async(req,res)=>{
+    try{
+        const idea_head = "Funny Ideas";
+        const API_URL = "https://v2.jokeapi.dev/joke/Any";
+        const result = await axios.get(API_URL);
+        res.render("ideas.ejs", {
+            content_setup: JSON.stringify(result.data.setup),
+            content_deli : JSON.stringify(result.data.delivery),
+            head:idea_head,
+        })
+    } catch (error) {
+        console.log("Error fetching joke:", error);
+        res.render("ideas.ejs", {
+            head: "Funny Ideas",
+            error: "Failed to fetch joke. Please try again!"
+        })
+    }
 })
 
 // 启动服务器
